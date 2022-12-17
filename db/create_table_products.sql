@@ -17,7 +17,6 @@ create table if not exists public.products (
     code text,
     name text,
     brand_id int,
-    company_id int,
     bought_price float,
     sold_price float,
     series_id int,
@@ -26,4 +25,4 @@ create table if not exists public.products (
     bought_from text,
     active boolean default true,
     metadata jsonb
-)
+);
