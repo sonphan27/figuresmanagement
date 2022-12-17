@@ -13,16 +13,17 @@ CREATE TYPE public.e_status AS ENUM (
 );
 
 create table if not exists public.products (
-  id serial primary key,
-  code text,
-  name text,
-  brand_id int,
-  company_id int,
-  bought_price float,
-  sold_price float,
-  serie_id int,
-  status e_status default 'new',
-  shipping_status e_shipping_status default 'shipped',
-  bought_from text,
-  active boolean default true
+    id serial primary key,
+    code text,
+    name text,
+    brand_id int,
+    company_id int,
+    bought_price float,
+    sold_price float,
+    series_id int,
+    status e_status default 'new',
+    shipping_status e_shipping_status default 'shipped',
+    bought_from text,
+    active boolean default true,
+    metadata jsonb
 )
