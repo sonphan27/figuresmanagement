@@ -8,7 +8,7 @@ db_context_var: ContextVar[PostgresqlExtDatabase] = ContextVar("db")
 def create_db():
   """Create db connection"""
   return PostgresqlExtDatabase(
-      'fastapi_project',
+      'postgres',
       user='postgres',
       password='postgres',
       host='db',
