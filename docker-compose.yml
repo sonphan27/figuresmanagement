@@ -1,0 +1,40 @@
+services:
+  api:
+    build: ./api
+    volumes:
+      - ./api:/src
+    working_dir: /src
+    ports:
+      - 4001:8000
+    user: "${COMPOSE_UID:-1000}:${COMPOSE_GID:-1000}"
+    environment:
+      - HOME=/tmp
+    command: ['uvicorn', 'main:router', '--reload', '--host=0.0.0.0']
+    entrypoint: ['poetry', 'run']
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - 5050:80
+    depends_on:
+      - db
+    logging:
+      driver: none
+  db:
+    build: ./db
+    ports:
+      - 127.0.0.1:4003:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=fastapi_project
+      - POSTGRES_HOST=127.0.0.1
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
+    driver: local
