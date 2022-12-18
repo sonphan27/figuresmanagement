@@ -1,8 +1,9 @@
 from . import PeeweeBaseModel
 import peewee as p
 from enum import Enum
-from utils.db import EnumField
 from playhouse.postgres_ext import BinaryJSONField
+from .brands import Brands
+from utils.db import EnumField, f, e
 
 
 class ProductStatusEnum(EnumField):
@@ -38,3 +39,29 @@ class Products(PeeweeBaseModel):
     shipping_status = ProductShippingStatusEnum()
     bought_from = p.TextField()
     metadata = BinaryJSONField()
+
+    @classmethod
+    def get_details(cls, product_id: int = None, single=False):
+        query = Products.select(
+            Products.id,
+            Products.name,
+            Products.code,
+            Products.bought_price,
+            Products.sold_price,
+            Products.bought_from,
+            Products.status,
+            Products.shipping_status,
+            Products.metadata
+        )
+        # get brand
+        query = query.select_extend(Brands.name.alias("brand_name"))
+        query = query.join(
+            Brands,
+            p.JOIN.LEFT_OUTER,
+            on=Brands.id == Products.brand_id
+        )
+        if product_id:
+            query = query.where(Products.id == product_id)
+        if single:
+            return f(query)
+        return e(query)

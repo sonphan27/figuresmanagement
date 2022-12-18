@@ -42,3 +42,15 @@ class EnumField(TextField, metaclass=_EnumFieldMeta):
             return self.EnumClass(value)  # pylint: disable=not-callable
         except ValueError:
             return value
+
+
+def f(query):
+    """query first"""
+    for result in list(query.dicts()):
+        return result
+    return None
+
+
+def e(query):
+    """query for all"""
+    return list(query.dicts())
