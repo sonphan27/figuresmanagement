@@ -26,5 +26,5 @@ def read_user(user_id: int):
 @router.post("/users", tags=["Users"])
 def post_user(payload_: PostUser):
     payload = payload_.dict()
-    user = Users.create_(**payload)
+    user = Users.create_(payload)
     return user
