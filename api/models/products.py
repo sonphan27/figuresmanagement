@@ -4,6 +4,9 @@ from enum import Enum
 from playhouse.postgres_ext import BinaryJSONField
 from .brands import Brands
 from utils.db import EnumField, f, e
+from .companies import Companies
+from .countries import Countries
+from .series import Series
 
 
 class ProductStatusEnum(EnumField):
@@ -53,12 +56,32 @@ class Products(PeeweeBaseModel):
             Products.shipping_status,
             Products.metadata
         )
-        # get brand
-        query = query.select_extend(Brands.name.alias("brand_name"))
+        # get brand and company and country
+        query = query.select_extend(
+            Brands.name.alias("brand_name"),
+            Companies.name.alias("company"),
+            Companies.country_id.alias("country_code"),
+            Countries.name.alias("country"),
+        )
         query = query.join(
             Brands,
             p.JOIN.LEFT_OUTER,
             on=Brands.id == Products.brand_id
+        ).join(
+            Companies,
+            p.JOIN.LEFT_OUTER,
+            on=Companies.id == Brands.company_id
+        ).join(
+            Countries,
+            p.JOIN.LEFT_OUTER,
+            on=Countries.id == Companies.country_id
+        )
+        # get series
+        query = query.select_extend(Series.name.alias("series"), Series.type.alias("category"))
+        query = query.join(
+            Series,
+            p.JOIN.LEFT_OUTER,
+            on=Series.id == Products.series_id
         )
         if product_id:
             query = query.where(Products.id == product_id)

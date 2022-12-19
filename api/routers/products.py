@@ -28,6 +28,11 @@ class GetProduct(ProductCommon):
     id: int
     metadata: dict = None
     brand_name: str
+    series: str
+    category: str
+    company: str
+    country_code: str
+    country: str
 
 
 class PatchProduct(BaseModel):
