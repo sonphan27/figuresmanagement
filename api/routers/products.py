@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from models.products import Products
 
+
 router = APIRouter()
 
 
