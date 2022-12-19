@@ -19,9 +19,7 @@ class Series(PeeweeBaseModel):
         # get country
         query = query.select_extend(Countries.name.alias("country"))
         query = query.join(
-            Countries,
-            p.JOIN.INNER,
-            on=Countries.id == Series.country_id
+            Countries, p.JOIN.INNER, on=Countries.id == Series.country_id
         )
         if series_id:
             query = query.where(Series.id == series_id)

@@ -6,15 +6,15 @@ db_context_var: ContextVar[PostgresqlExtDatabase] = ContextVar("db")
 
 
 def create_db():
-  """Create db connection"""
-  return PostgresqlExtDatabase(
-      'postgres',
-      user='postgres',
-      password='postgres',
-      host='db',
-      port=5432,
-      autorollback=True,
-  )
+    """Create db connection"""
+    return PostgresqlExtDatabase(
+        "postgres",
+        user="postgres",
+        password="postgres",
+        host="db",
+        port=5432,
+        autorollback=True,
+    )
 
 
 def _get_db():
@@ -36,7 +36,8 @@ db = _DBProxy()
 
 class PeeweeBaseModel(Model):
     """A base model that will use our Postgresql database"""
+
     class Meta:
         database = db
-        schema = 'public'
-        legacy_table_names = False 
+        schema = "public"
+        legacy_table_names = False

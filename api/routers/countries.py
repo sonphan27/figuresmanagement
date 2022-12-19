@@ -3,6 +3,7 @@ from typing import List
 from fastapi import APIRouter
 from models.countries import Countries, ContinentTypeEnum
 from pydantic import BaseModel
+
 router = APIRouter()
 
 

@@ -54,7 +54,7 @@ class Products(PeeweeBaseModel):
             Products.bought_from,
             Products.status,
             Products.shipping_status,
-            Products.metadata
+            Products.metadata,
         )
         # get brand and company and country
         query = query.select_extend(
@@ -63,25 +63,17 @@ class Products(PeeweeBaseModel):
             Companies.country_id.alias("country_code"),
             Countries.name.alias("country"),
         )
-        query = query.join(
-            Brands,
-            p.JOIN.LEFT_OUTER,
-            on=Brands.id == Products.brand_id
-        ).join(
-            Companies,
-            p.JOIN.LEFT_OUTER,
-            on=Companies.id == Brands.company_id
-        ).join(
-            Countries,
-            p.JOIN.LEFT_OUTER,
-            on=Countries.id == Companies.country_id
+        query = (
+            query.join(Brands, p.JOIN.LEFT_OUTER, on=Brands.id == Products.brand_id)
+            .join(Companies, p.JOIN.LEFT_OUTER, on=Companies.id == Brands.company_id)
+            .join(Countries, p.JOIN.LEFT_OUTER, on=Countries.id == Companies.country_id)
         )
         # get series
-        query = query.select_extend(Series.name.alias("series"), Series.type.alias("category"))
+        query = query.select_extend(
+            Series.name.alias("series"), Series.type.alias("category")
+        )
         query = query.join(
-            Series,
-            p.JOIN.LEFT_OUTER,
-            on=Series.id == Products.series_id
+            Series, p.JOIN.LEFT_OUTER, on=Series.id == Products.series_id
         )
         if product_id:
             query = query.where(Products.id == product_id)
