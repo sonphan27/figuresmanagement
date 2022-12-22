@@ -6,6 +6,7 @@ from .brands import Brands
 from utils.db import EnumField, f, e
 from .companies import Companies
 from .countries import Countries
+from .images import Images
 from .series import Series
 
 
@@ -74,6 +75,15 @@ class Products(PeeweeBaseModel):
         )
         query = query.join(
             Series, p.JOIN.LEFT_OUTER, on=Series.id == Products.series_id
+        )
+        # get images
+        query = query.select_extend(
+            p.fn.array(
+                Images.select(Images.url).where(
+                    (Images.parent_id == Products.id)
+                    & (Images.parent_table == "products")
+                )
+            ).alias("images")
         )
         if product_id:
             query = query.where(Products.id == product_id)

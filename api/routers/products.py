@@ -33,6 +33,7 @@ class GetProduct(ProductCommon):
     company: str
     country_code: str
     country: str
+    images: List[str]
 
 
 class PatchProduct(BaseModel):
