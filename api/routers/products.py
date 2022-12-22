@@ -3,6 +3,7 @@ from typing import List
 from fastapi import APIRouter
 from pydantic import BaseModel
 
+from models.images import Images
 from models.products import Products
 
 
@@ -17,6 +18,7 @@ class ProductCommon(BaseModel):
     status: str = "new"
     shipping_status: str = "shipped"
     bought_from: str = None
+    images: List[str] = []
 
 
 class PostProduct(ProductCommon):
@@ -33,7 +35,6 @@ class GetProduct(ProductCommon):
     company: str
     country_code: str
     country: str
-    images: List[str]
 
 
 class PatchProduct(BaseModel):
@@ -46,6 +47,7 @@ class PatchProduct(BaseModel):
     status: str = None
     shipping_status: str = None
     bought_from: str = None
+    images: List[str] = []
 
 
 @router.get("/products/{product_id}", response_model=GetProduct, tags=["Products"])
@@ -62,10 +64,28 @@ def get_products():
 @router.post("/products", tags=["Products"])
 def post_product(payload_: PostProduct):
     payload = payload_.dict()
-    return Products.create(**payload)
+    images = payload.pop("images", None)
+    result = Products.create(**payload)
+    if images:
+        image_payload = {
+            "parent_id": result,
+            "parent_table": "products",
+        }
+        for url in images:
+            Images.create(url=url, **image_payload)
+    return
 
 
 @router.patch("/products/{product_id}", tags=["Products"])
 def patch_product(product_id: int, payload_: PatchProduct):
     payload = payload_.dict(exclude_unset=True)
+    if images := payload.pop("images", None):
+        image_payload = {
+            "parent_id": product_id,
+            "parent_table": "products",
+        }
+        for url in images:
+            Images.create(url=url, **image_payload)
+    if not payload:
+        return
     return Products.update(**payload).where(Products.id == product_id).execute()
