@@ -1,16 +1,15 @@
 <template lang="pug">
-    v-container
-        v-row.text-center
-            v-col(cols="12")
-                v-img(
-                    :src="require('../assets/logo.svg')"
-                    class="my-3"
-                    contain
-                    height="200")
-        v-row
-            v-btn(@click="getProducts")
-                | Get Products
-    </v-container>
+v-container
+    v-row.text-center
+        v-col(cols="12")
+            v-img(
+                :src="require('../assets/logo.svg')"
+                class="my-3"
+                contain
+                height="200")
+    v-row.text-center
+        v-btn(@click="getProducts")
+            | Get Products
 </template>
 
 <script>
@@ -69,7 +68,7 @@ export default {
 
     methods: {
         getProducts() {
-            console.log('yolo111')
+            console.log('33')
         }
     },
 }

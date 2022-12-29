@@ -9,7 +9,13 @@ module.exports = defineConfig({
         ws: true,
         changeOrigin: true
       },
-    }
+    },
+    static: {
+        watch: {
+            ignored: "/node_modules/",
+            usePolling: true,
+        },
+    },
   },
 
   pluginOptions: {
