@@ -1,0 +1,6 @@
+.DS_Store
+web/app/node_modules
+api/models/__pycache__
+api/__pycache__
+*.pyc
+.idea
