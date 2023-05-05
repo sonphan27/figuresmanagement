@@ -68,7 +68,7 @@ export default {
 
     methods: {
         getProducts() {
-            console.log('33')
+            console.log('getProducts')
         }
     },
 }
